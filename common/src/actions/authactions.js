@@ -43,9 +43,9 @@ export const fetchUser = () => (dispatch) => {
             type: FETCH_USER_SUCCESS,
             payload: profile
           });
-        }else{
+        } else {
           let data = {
-            uid : user.uid,
+            uid: user.uid,
             mobile: '',
             email: '',
             firstName: '',
@@ -53,10 +53,10 @@ export const fetchUser = () => (dispatch) => {
             verifyId: ''
           }
 
-          if(user.providerData.length == 0 && user.email){
+          if (user.providerData.length == 0 && user.email) {
             data.email = user.email;
           }
-          if(user.providerData.length > 0 && user.phoneNumber){
+          if (user.providerData.length > 0 && user.phoneNumber) {
             data.mobile = user.phoneNumber;
           }
           if (user.providerData.length > 0) {
@@ -84,12 +84,18 @@ export const fetchUser = () => (dispatch) => {
               }
             }
           }
-          if(user.providerData.length > 0 && user.verifyId){
+          if (user.providerData.length > 0 && user.verifyId) {
             data.verifyId = user.verifyId;
           }
 
           const settings = store.getState().settingsdata.settings;
-          let host = window && window.location && settings.CompanyWebsite === window.location.origin? window.location.origin : `https://${config.projectId}.web.app`
+          let host;
+          if (window && window.location && window.location.hostname === 'localhost') {
+            // Use local Firebase Functions emulator when developing locally
+            host = 'http://localhost:5001/dilon-ride/us-central1';
+          } else {
+            host = window && window.location && settings.CompanyWebsite === window.location.origin ? window.location.origin : `https://${config.projectId}.web.app`
+          }
           let url = `${host}/check_auth_exists`;
           const response = await fetch(url, {
             method: 'POST',
@@ -97,22 +103,22 @@ export const fetchUser = () => (dispatch) => {
               'Content-Type': 'application/json',
               "Authorization": "Basic " + base64.encode(config.projectId + ":" + AccessKey)
             },
-            body: JSON.stringify({data: JSON.stringify(data)})
+            body: JSON.stringify({ data: JSON.stringify(data) })
           })
           const json = await response.json();
-          if(json.uid){
+          if (json.uid) {
             dispatch({
               type: FETCH_USER_SUCCESS,
               payload: json
             });
-          } else{
+          } else {
             const langData = store.getState().languagedata;
             const defaultLang = langData?.defaultLanguage;
             dispatch({
               type: FETCH_USER_FAILED,
-              payload: { 
-                code: defaultLang?.auth_error || 'AUTH_ERROR', 
-                message: json.error || 'Authentication failed' 
+              payload: {
+                code: defaultLang?.auth_error || 'AUTH_ERROR',
+                message: json.error || 'Authentication failed'
               }
             });
           }
@@ -123,9 +129,9 @@ export const fetchUser = () => (dispatch) => {
       const defaultLang = langData?.defaultLanguage;
       dispatch({
         type: FETCH_USER_FAILED,
-        payload: { 
-          code: defaultLang?.auth_error || 'AUTH_ERROR', 
-          message: defaultLang?.not_logged_in || 'User not logged in' 
+        payload: {
+          code: defaultLang?.auth_error || 'AUTH_ERROR',
+          message: defaultLang?.not_logged_in || 'User not logged in'
         }
       });
     }
@@ -155,7 +161,7 @@ export const checkUserExists = async (data) => {
   } = firebase;
 
   const settings = store.getState().settingsdata.settings;
-  let host = window && window.location && settings.CompanyWebsite === window.location.origin? window.location.origin : `https://${config.projectId}.web.app` || `http://localhost:3000`
+  let host = window && window.location && settings.CompanyWebsite === window.location.origin ? window.location.origin : `https://${config.projectId}.web.app` || `http://localhost:3000`
   let url = `${host}/check_user_exists`;
   const response = await fetch(url, {
     method: 'POST',
@@ -192,9 +198,9 @@ export const updateProfileWithEmail = (profileData) => async (dispatch) => {
   const {
     config
   } = firebase;
-  try{
+  try {
     const settings = store.getState().settingsdata.settings;
-    let host = window && window.location && settings.CompanyWebsite === window.location.origin? window.location.origin : `https://${config.projectId}.web.app`
+    let host = window && window.location && settings.CompanyWebsite === window.location.origin ? window.location.origin : `https://${config.projectId}.web.app`
     let url = `${host}/update_user_email`;
     const response = await fetch(url, {
       method: 'POST',
@@ -205,20 +211,20 @@ export const updateProfileWithEmail = (profileData) => async (dispatch) => {
       body: JSON.stringify(profileData)
     })
     const result = await response.json();
-    if(result.error){ 
-      return {success: false, error: result.error}
+    if (result.error) {
+      return { success: false, error: result.error }
     }
-  }catch(error){
-    return {success: false, error: error}
+  } catch (error) {
+    return { success: false, error: error }
   }
 }
 
 
 export const requestPhoneOtpDevice = (verificationId) => async (dispatch) => {
-    dispatch({
-      type: REQUEST_OTP_SUCCESS,
-      payload: verificationId
-    }); 
+  dispatch({
+    type: REQUEST_OTP_SUCCESS,
+    payload: verificationId
+  });
 }
 
 export const mobileSignIn = (verficationId, code) => (dispatch) => {
@@ -250,9 +256,9 @@ export const saveAddresses = async (uid, location, name) => {
       let didNotMatch = true;
       for (let key in addresses) {
         let entry = addresses[key];
-        if (entry.name == name ) {
+        if (entry.name == name) {
           didNotMatch = false;
-          update(child(singleUserRef(uid),"savedAddresses/" + key),{
+          update(child(singleUserRef(uid), "savedAddresses/" + key), {
             description: location.add,
             lat: location.lat,
             lng: location.lng,
@@ -263,7 +269,7 @@ export const saveAddresses = async (uid, location, name) => {
         }
       }
       if (didNotMatch) {
-        push(child(singleUserRef(uid),"savedAddresses"),{
+        push(child(singleUserRef(uid), "savedAddresses"), {
           description: location.add,
           lat: location.lat,
           lng: location.lng,
@@ -272,7 +278,7 @@ export const saveAddresses = async (uid, location, name) => {
         });
       }
     } else {
-      push(child(singleUserRef(uid),"savedAddresses"),{
+      push(child(singleUserRef(uid), "savedAddresses"), {
         description: location.add,
         lat: location.lat,
         lng: location.lng,
@@ -280,7 +286,7 @@ export const saveAddresses = async (uid, location, name) => {
         name: name
       });
     }
-  }, {onlyOnce: true});
+  }, { onlyOnce: true });
 };
 
 export const googleLogin = (idToken, accessToken) => (dispatch) => {
@@ -336,7 +342,7 @@ export const appleSignIn = (credentialData) => (dispatch) => {
     signInWithPopup(auth, appleProvider).then(function (result) {
       signInWithCredential(auth, result.credential)
         .then((user) => {
-        //OnAuthStateChange takes care of Navigation
+          //OnAuthStateChange takes care of Navigation
         })
         .catch(error => {
           dispatch({
@@ -370,13 +376,13 @@ export const signOff = () => (dispatch) => {
   off(userNotificationsRef(uid));
 
   onValue(singleUserRef(uid), snapshot => {
-      if(snapshot.val()){
-        const profile = snapshot.val();
-        if (profile && profile.usertype === 'driver') {
-          update(singleUserRef(uid), {driverActiveStatus:false});
-        }
-        setTimeout(()=>{
-          signOut(auth)
+    if (snapshot.val()) {
+      const profile = snapshot.val();
+      if (profile && profile.usertype === 'driver') {
+        update(singleUserRef(uid), { driverActiveStatus: false });
+      }
+      setTimeout(() => {
+        signOut(auth)
           .then(() => {
             dispatch({
               type: USER_SIGN_OUT,
@@ -384,11 +390,11 @@ export const signOff = () => (dispatch) => {
             });
           })
           .catch(error => {
-      
+
           });
-        },2000)
-      }
-  },{onlyOnce: true});
+      }, 2000)
+    }
+  }, { onlyOnce: true });
 };
 
 export const updateProfile = (updateData) => async (dispatch) => {
@@ -402,13 +408,13 @@ export const updateProfile = (updateData) => async (dispatch) => {
   } = firebase;
 
   const uid = auth.currentUser.uid;
-  
+
   if (updateData.licenseImage) {
     await uploadBytesResumable(driverDocsRef(uid), updateData.licenseImage);
     updateData.licenseImage = await getDownloadURL(driverDocsRef(uid));
   }
   if (updateData.licenseImageBack) {
-    await uploadBytesResumable(driverDocsRefBack(uid),updateData.licenseImageBack);
+    await uploadBytesResumable(driverDocsRefBack(uid), updateData.licenseImageBack);
     updateData.licenseImageBack = await getDownloadURL(driverDocsRefBack(uid));
   }
   if (updateData.verifyIdImage) {
@@ -430,7 +436,7 @@ export const updateProfileImage = (imageBlob) => {
 
   const uid = auth.currentUser.uid;
 
-  uploadBytesResumable( profileImageRef(uid), imageBlob).then(() => {
+  uploadBytesResumable(profileImageRef(uid), imageBlob).then(() => {
     imageBlob.close()
     return getDownloadURL(profileImageRef(uid))
   }).then((url) => {
@@ -452,7 +458,7 @@ export const updateWebProfileImage = async (imageBlob) => {
 
   await uploadBytesResumable(profileImageRef(uid), imageBlob);
   let image = await getDownloadURL(profileImageRef(uid));
-  update(singleUserRef(uid), {profile_image: image});
+  update(singleUserRef(uid), { profile_image: image });
 
 };
 export const updateCustomerProfileImage = async (imageBlob, id) => {
@@ -466,11 +472,11 @@ export const updateCustomerProfileImage = async (imageBlob, id) => {
 
   await uploadBytesResumable(profileImageRef(uid), imageBlob);
   let image = await getDownloadURL(profileImageRef(uid));
-  update(singleUserRef(uid), {profile_image: image});
+  update(singleUserRef(uid), { profile_image: image });
 
 };
 
-export const updatePushToken = (token, platform)  => {
+export const updatePushToken = (token, platform) => {
 
   const {
     auth,
@@ -500,9 +506,9 @@ export const fetchWalletHistory = () => (dispatch) => {
 
   const uid = auth.currentUser.uid;
 
-  onValue(walletHistoryRef(uid) , snapshot => {
-    const data = snapshot.val(); 
-    if(data){
+  onValue(walletHistoryRef(uid), snapshot => {
+    const data = snapshot.val();
+    if (data) {
       const arr = Object.keys(data).map(i => {
         data[i].id = i
         return data[i]
@@ -522,9 +528,9 @@ export const fetchUserWalletHistory = (userId) => (dispatch) => {
 
   const uid = userId;
 
-  onValue(walletHistoryRef(uid) , snapshot => {
-    const data = snapshot.val(); 
-    if(data){
+  onValue(walletHistoryRef(uid), snapshot => {
+    const data = snapshot.val();
+    if (data) {
       const arr = Object.keys(data).map(i => {
         data[i].id = i
         return data[i]
@@ -533,10 +539,10 @@ export const fetchUserWalletHistory = (userId) => (dispatch) => {
         type: UPDATE_USER_WALLET_HISTORY,
         payload: arr.reverse()
       });
-    }else{
+    } else {
       dispatch({
         type: UPDATE_USER_WALLET_HISTORY,
-        payload:[]
+        payload: []
       });
     }
   });
@@ -551,18 +557,18 @@ export const sendResetMail = (email) => async (dispatch) => {
     type: SEND_RESET_EMAIL,
     payload: email
   });
-  sendPasswordResetEmail(authRef(), email).then(function() {
+  sendPasswordResetEmail(authRef(), email).then(function () {
     console.log('Email send successfuly');
   }).catch(function (error) {
-      const langData = store.getState().languagedata;
-      const defaultLang = langData?.defaultLanguage;
-      dispatch({
-        type: SEND_RESET_EMAIL_FAILED,
-        payload: {
-          code: defaultLang?.auth_error || 'AUTH_ERROR',
-          message: defaultLang?.not_registred || 'User not registered'
-        }
-      });
+    const langData = store.getState().languagedata;
+    const defaultLang = langData?.defaultLanguage;
+    dispatch({
+      type: SEND_RESET_EMAIL_FAILED,
+      payload: {
+        code: defaultLang?.auth_error || 'AUTH_ERROR',
+        message: defaultLang?.not_registred || 'User not registered'
+      }
+    });
   });
 };
 
@@ -590,12 +596,12 @@ export const requestMobileOtp = (mobile) => async (dispatch) => {
   dispatch({
     type: REQUEST_OTP,
     payload: true
-  }); 
+  });
 
   const settings = store.getState().settingsdata.settings;
-  let host = window && window.location && settings.CompanyWebsite === window.location.origin? window.location.origin : `https://${config.projectId}.web.app`
+  let host = window && window.location && settings.CompanyWebsite === window.location.origin ? window.location.origin : `https://${config.projectId}.web.app`
   let url = `${host}/request_mobile_otp`;
-  try{
+  try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -604,18 +610,18 @@ export const requestMobileOtp = (mobile) => async (dispatch) => {
       body: JSON.stringify({ mobile: mobile })
     });
     const result = await response.json();
-    if(result.success){
+    if (result.success) {
       dispatch({
         type: REQUEST_OTP_SUCCESS,
         payload: true
       });
-    }else{
+    } else {
       dispatch({
         type: REQUEST_OTP_FAILED,
         payload: result.error
       });
     }
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
 }
@@ -629,9 +635,9 @@ export const verifyMobileOtp = (mobile, otp) => async (dispatch) => {
     mobile: mobile,
     otp: otp
   };
-  try{
+  try {
     const settings = store.getState().settingsdata.settings;
-    let host = window && window.location && settings.CompanyWebsite === window.location.origin? window.location.origin : `https://${config.projectId}.web.app`
+    let host = window && window.location && settings.CompanyWebsite === window.location.origin ? window.location.origin : `https://${config.projectId}.web.app`
     let url = `${host}/verify_mobile_otp`;
     const response = await fetch(url, {
       method: 'POST',
@@ -641,8 +647,8 @@ export const verifyMobileOtp = (mobile, otp) => async (dispatch) => {
       body: JSON.stringify(body)
     })
     const result = await response.json();
-    if(result.token){
-      signInWithCustomToken(auth,result.token)
+    if (result.token) {
+      signInWithCustomToken(auth, result.token)
         .then((user) => {
           //OnAuthStateChange takes care of Navigation
         })
@@ -652,13 +658,13 @@ export const verifyMobileOtp = (mobile, otp) => async (dispatch) => {
             payload: error
           });
         });
-    }else{
+    } else {
       dispatch({
         type: USER_SIGN_IN_FAILED,
         payload: result.error
       });
     }
-  }catch(error){
+  } catch (error) {
     console.log(error);
     dispatch({
       type: USER_SIGN_IN_FAILED,
@@ -667,7 +673,7 @@ export const verifyMobileOtp = (mobile, otp) => async (dispatch) => {
   }
 }
 
-export const updateAuthMobile = async ( mobile, otp) => {
+export const updateAuthMobile = async (mobile, otp) => {
   const {
     auth,
     config
@@ -683,7 +689,7 @@ export const updateAuthMobile = async ( mobile, otp) => {
   const settings = store.getState().settingsdata.settings;
   let host = window && window.location && settings.CompanyWebsite === window.location.origin ? window.location.origin : `https://${config.projectId}.web.app`
   let url = `${host}/update_auth_mobile`;
-  try{
+  try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -692,12 +698,12 @@ export const updateAuthMobile = async ( mobile, otp) => {
       body: JSON.stringify(body)
     })
     const result = await response.json();
-    if(result.success){
-      return {success: true}
-    }else{
-      return {success: false, error: result.error}
+    if (result.success) {
+      return { success: true }
+    } else {
+      return { success: false, error: result.error }
     }
-  }catch(error){
-    return {success: false, error: error}
+  } catch (error) {
+    return { success: false, error: error }
   }
 }
