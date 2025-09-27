@@ -6,8 +6,8 @@
 	"android_app_version": "100",
 	"firebaseProjectId": "dilon-ride",
 	"googleApiKeys": {
-		"ios": "AIzaSyCbpFcExJuCfEFoza7vOiEZZnK9JJPQocU",
-		"android": "AIzaSyCbpFcExJuCfEFoza7vOiEZZnK9JJPQocU",
+		"ios": "AIzaSyAbpZdXM6LWDA09dNRo69nBG3P0bn4pb8o",
+		"android": "AIzaSyA_SvPQDIGtjOso37N72Pod3kj6p5L5n60",
 		"web": "AIzaSyCbpFcExJuCfEFoza7vOiEZZnK9JJPQocU",
 		"server": "AIzaSyCbpFcExJuCfEFoza7vOiEZZnK9JJPQocU"
 	},
@@ -15,5 +15,5 @@
 	"expo_slug": "dilon-ride",
 	"expo_project_id": "948970f6-e324-4a39-9c4b-71df189baf71",
 	"admin_email": "sameershoukat526@gmail.com",
-	"purchase_code": ""
+	"purchase_code": "620c5014-50da-4a40-becc-0be3f55e94dd"
 }

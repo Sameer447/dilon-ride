@@ -11,6 +11,7 @@
     "app:build-ios-sim": "cd mobile-app && eas build -p ios --profile simulator",
     "app:build-dev-client": "cd mobile-app && eas build --profile development",
     "app:submit": "cd mobile-app && eas submit",
+    "app:fix": "yarn workspace mobile-app yarn expo install --fix",
     "app:doctor": "yarn workspace mobile-app doctor",
     "app:doctor:fix": "yarn workspace mobile-app doctor:fix",
     "app:upgrade-sdk": "yarn workspace mobile-app upgrade-sdk",

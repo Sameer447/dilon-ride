@@ -38,6 +38,13 @@
             {
               "client_id": "853981952349-64f365ibu2k3k2q7nupr25p1of14odjl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "853981952349-svcicclesdhpft68c2glb8dil18onks9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dilonride.app"
+              }
             }
           ]
         }
