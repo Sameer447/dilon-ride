@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "853981952349",
+    "firebase_url": "https://dilon-ride-default-rtdb.firebaseio.com",
+    "project_id": "dilon-ride",
+    "storage_bucket": "dilon-ride.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853981952349:android:4f256c685164311815d0b4",
+        "android_client_info": {
+          "package_name": "com.dilonride.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853981952349-6202u1ige55cm9a56ds1pa924cjfv76i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dilonride.app",
+            "certificate_hash": "74fa6e2d643944245afb5e08582f4228083b89df"
+          }
+        },
+        {
+          "client_id": "853981952349-64f365ibu2k3k2q7nupr25p1of14odjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_SvPQDIGtjOso37N72Pod3kj6p5L5n60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853981952349-64f365ibu2k3k2q7nupr25p1of14odjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
