@@ -1,0 +1,2 @@
+// Google OAuth Client IDs for web app
+export const webClientId = "853981952349-64f365ibu2k3k2q7nupr25p1of14odjl.apps.googleusercontent.com";
